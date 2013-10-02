@@ -1,0 +1,59 @@
+// Be careful with letter register
+// Parameters are to be written exactly as they are
+
+// Draws grid over terrain
+drawGrid             = 1
+// Draws paths for enemies
+drawPath             = 1
+gridNbCellsX         = 24
+gridNbCellsY         = 8
+
+hitDistance          = 0.1
+
+nbTrees              = 30
+
+playerHP             = 10
+playerMoney          = 100
+
+heroHP                   = 100
+heroSpeed                = 10
+heroPatrolRadius         = 20
+heroFightRadius          = 2
+heroPhysicalDamagePerSec = 30
+heroAutoHealPerSec       = 5
+heroDeathTime            = 10
+
+// Enemies
+
+enemyRecalcPathTime       = 3.0
+
+enemyImpHP                = 50
+enemyImpKillReward        = 20
+enemyImpSpeed             = 8.0
+enemyImpHeroHostileChance = 0.01
+enemyImpHeroHostileRadius = 10.0
+enemyImpFightRadius       = 2
+enemyImpPhysicalDamagePerSec = 10
+
+enemyGargoyleHP                = 20
+enemyGargoyleKillReward        = 30
+enemyGargoyleSpeed             = 5.0
+enemyGargoyleHeroHostileChance = 0
+enemyGargoyleHeroHostileRadius = 0
+enemyGargoyleFightRadius       = 2
+enemyGargoylePhysicalDamagePerSec = 1
+
+//Towers
+towerArcherPhysicalDamage  = 3
+towerArcherProjectileSpeed = 40.0
+towerArcherRestoration     = 0.3
+towerArcherRadius          = 10.0
+towerArcherPrice           = 10
+
+towerCanonPhysicalDamage     = 9
+towerCanonProjectileSpeed    = 15.0
+towerCanonBallDamageRadius   = 10.0
+towerCanonBallParabolaHeight = 5.0
+towerCanonRestoration        = 0.6
+towerCanonRadius             = 15.0
+towerCanonPrice              = 30
