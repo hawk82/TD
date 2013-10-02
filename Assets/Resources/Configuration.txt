@@ -17,7 +17,7 @@ playerMoney          = 100
 
 heroHP                   = 100
 heroSpeed                = 10
-heroPatrolRadius         = 20
+heroPatrolRadius         = 10
 heroFightRadius          = 2
 heroPhysicalDamagePerSec = 30
 heroAutoHealPerSec       = 5
@@ -31,9 +31,9 @@ enemyImpHP                = 50
 enemyImpKillReward        = 20
 enemyImpSpeed             = 8.0
 enemyImpHeroHostileChance = 0.01
-enemyImpHeroHostileRadius = 10.0
+enemyImpHeroHostileRadius = 5.0
 enemyImpFightRadius       = 2
-enemyImpPhysicalDamagePerSec = 10
+enemyImpPhysicalDamagePerSec = 15
 
 enemyGargoyleHP                = 20
 enemyGargoyleKillReward        = 30

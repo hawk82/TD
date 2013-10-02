@@ -18,12 +18,36 @@ public class TDGUILogic : MonoBehaviour {
 			Application.LoadLevel("GameOver");
 		}
 
+		Camera camera = Camera.main;
+        if (Input.GetMouseButtonDown(0))
+        {
+            m_dragOrigin = Input.mousePosition;
+            return;
+        }
+
+        if (Input.GetMouseButton(0))
+		{
+			Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+			Ray oldRay = camera.ScreenPointToRay(m_dragOrigin);
+			m_dragOrigin = Input.mousePosition;
+
+			GameObject terrain = TDWorld.getWorld().getTerrain();
+			
+			RaycastHit hit, oldHit;
+			if (terrain.collider.Raycast(ray, out hit, 10000f) && terrain.collider.Raycast(oldRay, out oldHit, 10000f))
+			{
+				Vector3 dir = hit.point - oldHit.point;
+ 	        	Vector3 move = new Vector3(dir.x, 0f, 0f);
+ 				camera.transform.Translate(move, Space.World); 
+			}
+			return;
+		}
+
 		if (Mode.eNone == m_mode)
 			return;
-		if (Input.GetMouseButtonDown(0))
+
+		if (Input.GetMouseButtonUp(0))
 		{
-
-
 			Ray mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
 			RaycastHit hit;
 			if (Physics.Raycast(mouseRay, out hit))
@@ -164,4 +188,5 @@ public class TDGUILogic : MonoBehaviour {
 	}
 
 	Mode m_mode;
+    private Vector3 m_dragOrigin;
 }
