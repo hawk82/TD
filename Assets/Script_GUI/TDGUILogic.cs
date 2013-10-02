@@ -73,44 +73,52 @@ public class TDGUILogic : MonoBehaviour {
 
 	void OnGUI ()
 	{
-		GUI.Box(new Rect(20, 20, 300, 80), "Player");
+		float screenWidth = Screen.width;
+		float screenHeight = Screen.height;
+
+		float outfit = 20f;
+		float width = 0.2f*screenWidth;
+		float height = 0.1f*screenHeight;
+		float textHeight = 0.4f*height;
+
+		GUI.Box(new Rect(outfit, outfit, width, height), "");
 
 		string healthString;
 		healthString = TDWorld.getWorld().getTDPlayer().health() + " HP";
-		GUI.Label(new Rect(30, 50, 50, 20), healthString);
+		GUI.Label(new Rect(2*outfit, 2*outfit, 50, textHeight), healthString);
 
 		string moneyString;
 		moneyString = TDWorld.getWorld().getTDPlayer().money() + " $";
-		GUI.Label(new Rect(130, 50, 50, 20), moneyString);
+		GUI.Label(new Rect(100, 2*outfit, 50, textHeight), moneyString);
 
-		GUI.Box(new Rect(800, 500, 500, 80), "Towers");
+		GUI.Box(new Rect(screenWidth - outfit - width, screenHeight - outfit - height, width, height), "Towers");
 		
 		GUI.SetNextControlName("Archer");
-		if (GUI.Button(new Rect(850, 530, 80, 20), "Archer"))
+		if (GUI.Button(new Rect(screenWidth - width, screenHeight - height, 80, textHeight), "Archer"))
 		{
 			m_mode = Mode.eArcher;
 		}
 
 		GUI.SetNextControlName("Canonier");
-		if (GUI.Button(new Rect(950, 530, 80, 20), "Canonier"))
+		if (GUI.Button(new Rect(screenWidth - width + 80 + outfit, screenHeight - height, 80, textHeight), "Canonier"))
 		{
 			m_mode = Mode.eCanon;	
 		}
 
-		GUI.Box(new Rect(20, 500, 500, 80), "Eric the Strongblade");
+		GUI.Box(new Rect(outfit, screenHeight - height - outfit, width, height), "Eric the Strongblade");
 
 		string heroHealthString;
 		heroHealthString = (int) Mathf.Ceil(TDWorld.getWorld().getTDHero().health()) + " HP";
-		GUI.Label(new Rect(30, 530, 50, 20), heroHealthString);
+		GUI.Label(new Rect(2*outfit, screenHeight - height, 50, textHeight), heroHealthString);
 		
 		GUI.SetNextControlName("Patrol");
-		if (GUI.Button(new Rect(150, 530, 80, 20), "Patrol"))
+		if (GUI.Button(new Rect(50f+2f*outfit, screenHeight - height, 50, textHeight), "Patrol"))
 		{
 			m_mode = Mode.eHeroPatrol;
 		}
 
 		GUI.SetNextControlName("To base!");
-		if (GUI.Button(new Rect(300, 530, 80, 20), "To base!"))
+		if (GUI.Button(new Rect(100f+3f*outfit, screenHeight - height, 50, textHeight), "Base!"))
 		{
 			m_mode = Mode.eHeroToBase;
 			TDHero tdHero = TDWorld.getWorld().getTDHero();
