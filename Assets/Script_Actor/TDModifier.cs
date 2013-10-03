@@ -118,3 +118,30 @@ public class TDHealthRegeneration : TDModifier
 	float m_applyTime;
 	float m_healPerSec;
 }
+
+public class TDIceSlow : TDModifier
+{
+	public TDIceSlow(float applyTime, float speedFactor)
+	{
+		m_applyTime = applyTime;
+	 	m_speedFactor = speedFactor;
+	}
+
+	protected override float applyTime() // Does instant damage if not overriden
+	{
+		return m_applyTime;
+	}
+
+	protected override void applyFirstTime()
+	{
+	}
+	
+	protected override void applyContinuous()
+	{
+		m_target.slowSpeed(m_speedFactor);
+		return;
+	}
+
+	float m_applyTime;
+	float m_speedFactor;
+}

@@ -71,6 +71,11 @@ public class TDGUILogic : MonoBehaviour {
 									break;
 								newTower = world.addTower(TDTower.Type.eCanonTower, pos);
 								break;
+							case Mode.eIce:
+								if (!world.canTowerBeBuiltAt(pos))
+									break;
+								newTower = world.addTower(TDTower.Type.eIceTower, pos);
+								break;
 							case Mode.eHeroPatrol:
 								TDHero tdHero = world.getTDHero();
 								tdHero.patrol(pos);
@@ -101,7 +106,7 @@ public class TDGUILogic : MonoBehaviour {
 		float screenHeight = Screen.height;
 
 		float outfit = 20f;
-		float width = 0.2f*screenWidth;
+		float width = 0.3f*screenWidth;
 		float height = 0.1f*screenHeight;
 		float textHeight = 0.4f*height;
 
@@ -127,6 +132,12 @@ public class TDGUILogic : MonoBehaviour {
 		if (GUI.Button(new Rect(screenWidth - width + 80 + outfit, screenHeight - height, 80, textHeight), "Canonier"))
 		{
 			m_mode = Mode.eCanon;	
+		}
+
+		GUI.SetNextControlName("Ice");
+		if (GUI.Button(new Rect(screenWidth - width + 180 + outfit, screenHeight - height, 80, textHeight), "Ice"))
+		{
+			m_mode = Mode.eIce;	
 		}
 
 		GUI.Box(new Rect(outfit, screenHeight - height - outfit, width, height), "Eric the Strongblade");
@@ -183,8 +194,9 @@ public class TDGUILogic : MonoBehaviour {
 		eNone       = 0,
 		eArcher     = 1,
 		eCanon      = 2,
-		eHeroPatrol = 3,
-		eHeroToBase = 4
+		eIce        = 3,
+		eHeroPatrol = 20,
+		eHeroToBase = 21
 	}
 
 	Mode m_mode;

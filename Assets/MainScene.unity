@@ -606,6 +606,7 @@ MonoBehaviour:
     type: 2}
   m_prefabArrowTower: {fileID: 100000, guid: eeac5c2a639061e4e82ab8b154fd6b99, type: 2}
   m_prefabCanonTower: {fileID: 100000, guid: 04c42bf59c8dcd14fa09762070224bf2, type: 2}
+  m_prefabIceTower: {fileID: 100000, guid: 65403cee25000c44eae011aea4343220, type: 2}
   m_prefabTree: {fileID: 100000, guid: 3b8c0a310dad6794ba8028026450a141, type: 2}
 --- !u!1 &1852161209
 GameObject:

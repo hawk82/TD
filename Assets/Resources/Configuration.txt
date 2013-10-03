@@ -57,3 +57,11 @@ towerCanonBallParabolaHeight = 5.0
 towerCanonRestoration        = 0.6
 towerCanonRadius             = 15.0
 towerCanonPrice              = 30
+
+towerIcePhysicalDamage  = 1
+towerIceProjectileSpeed = 30.0
+towerIceRestoration     = 0.5
+towerIceRadius          = 10.0
+towerIcePrice           = 100
+towerIceTime            = 5.0
+towerIceSpeedFactor     = 0.90

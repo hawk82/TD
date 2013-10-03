@@ -1,9 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class TDTowerStrategy
+public abstract class TDTowerStrategy
 {
-	public bool shouldShootAt(TDEnemy enemy, TDDamage potentialDamage)
+	public abstract bool shouldShootAt(TDEnemy enemy, TDDamage potentialDamage);
+	public abstract void shootingAt(TDEnemy enemy, TDDamage potentialDamage);
+	public abstract void destroyCallback(TDEnemy enemy);
+}
+
+public class TDDefaultTowerStrategy : TDTowerStrategy
+{
+	public override bool shouldShootAt(TDEnemy enemy, TDDamage potentialDamage)
 	{
 		if (m_followedEnemies == null)
 			m_followedEnemies = new Dictionary<TDEnemy, float>();
@@ -19,12 +26,12 @@ public class TDTowerStrategy
 		return true;
 	}
 
-	public void shootingAt(TDEnemy enemy, TDDamage potentialDamage)
+	public override void shootingAt(TDEnemy enemy, TDDamage potentialDamage)
 	{
 		m_followedEnemies[enemy] += potentialDamage.estimatedFirstDamage();
 	}
 
-	void destroyCallback(TDEnemy enemy)
+	public override void destroyCallback(TDEnemy enemy)
 	{
 		enemy.OnEventDestroy -= destroyCallback;
 		if (m_followedEnemies.ContainsKey(enemy))
@@ -34,4 +41,44 @@ public class TDTowerStrategy
 	}
 	
 	Dictionary<TDEnemy, float> m_followedEnemies;
+}
+
+
+public class TDFairTowerStrategy : TDTowerStrategy
+{
+	public TDFairTowerStrategy() {m_counter = 0; m_counterLimit = 10;}
+
+	public override bool shouldShootAt(TDEnemy enemy, TDDamage potentialDamage)
+	{
+		if (m_followedEnemies == null)
+			m_followedEnemies = new List<TDEnemy>();
+		m_counter++;
+		if (m_counter > m_counterLimit)
+		{
+			m_counter = 0;
+			m_followedEnemies.Clear();
+		}
+		if (!m_followedEnemies.Contains(enemy)) // New enemies always have preference
+			return true;
+		return false;
+	}
+
+	public override void shootingAt(TDEnemy enemy, TDDamage potentialDamage)
+	{
+		if (!m_followedEnemies.Contains(enemy))
+			m_followedEnemies.Add(enemy);
+	}
+
+	public override void destroyCallback(TDEnemy enemy)
+	{
+		enemy.OnEventDestroy -= destroyCallback;
+		if (m_followedEnemies.Contains(enemy))
+		{
+			m_followedEnemies.Remove(enemy);
+		}
+	}
+	
+	int m_counter;
+	int m_counterLimit;
+	List<TDEnemy> m_followedEnemies;
 }

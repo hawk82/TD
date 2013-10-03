@@ -6,7 +6,8 @@ public abstract class TDTower : MonoBehaviour {
 	public enum Type
 	{
 		eArrowTower = 0,
-		eCanonTower = 1
+		eCanonTower = 1,
+		eIceTower   = 2
 	}
 
 	// Use this for initialization
@@ -36,7 +37,7 @@ public abstract class TDTower : MonoBehaviour {
 				if (enemy.canFly())
 					if (!shootsFlying())
 						continue;
-				if (!TDWorld.getWorld().m_strategy.shouldShootAt(enemy, damage))
+				if (!getStrategy().shouldShootAt(enemy, damage))
 					continue;
 				if ((recDist < 0) || (recDist > dist))
 				{
@@ -48,9 +49,14 @@ public abstract class TDTower : MonoBehaviour {
 		if (recObject == null)
 			return;
 		TDEnemy recEnemy = TDWorld.getWorld().getTDEnemy(recObject);
-		TDWorld.getWorld().m_strategy.shootingAt(recEnemy, damage);
+		getStrategy().shootingAt(recEnemy, damage);
 		shootTo(recEnemy);
 		m_restTime = Time.time;
+	}
+
+	public virtual TDTowerStrategy getStrategy()
+	{
+		return TDWorld.getWorld().m_defaultStrategy;
 	}
 
 	public abstract float getRestoration();

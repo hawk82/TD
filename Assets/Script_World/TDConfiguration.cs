@@ -121,4 +121,12 @@ public class TDConfiguration
 	public float towerCanonRestoration;
 	public float towerCanonRadius;
 	public uint  towerCanonPrice;
+
+	public float towerIcePhysicalDamage;
+	public float towerIceProjectileSpeed;
+	public float towerIceRestoration;
+	public float towerIceRadius;
+	public uint  towerIcePrice;
+	public float towerIceTime;
+	public float towerIceSpeedFactor;
 }

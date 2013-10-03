@@ -5,7 +5,8 @@ public class TDWorld : MonoBehaviour {
 
 	void Awake()
 	{
-		m_strategy = new TDTowerStrategy();
+		m_defaultStrategy = new TDDefaultTowerStrategy();
+		m_fairStrategy    = new TDFairTowerStrategy();
 		m_configuration = new TDConfiguration();
 		m_configuration.readFromResource();
 
@@ -257,6 +258,9 @@ public class TDWorld : MonoBehaviour {
 			case TDTower.Type.eCanonTower:
 				tower = (GameObject) Instantiate(m_prefabCanonTower, pos, Quaternion.identity);
 				break;
+			case TDTower.Type.eIceTower:
+				tower = (GameObject) Instantiate(m_prefabIceTower, pos, Quaternion.identity);
+				break;
 				
 		}
 		return tower;
@@ -316,7 +320,8 @@ public class TDWorld : MonoBehaviour {
 	}
 
 	public TDConfiguration m_configuration;
-	public TDTowerStrategy m_strategy;
+	public TDTowerStrategy m_defaultStrategy;
+	public TDTowerStrategy m_fairStrategy;
 	public TDGrid m_grid;
 
 	public GameObject m_prefabEnemyImp;
@@ -324,6 +329,7 @@ public class TDWorld : MonoBehaviour {
 
 	public GameObject m_prefabArrowTower;
 	public GameObject m_prefabCanonTower;
+	public GameObject m_prefabIceTower;
 	public GameObject m_prefabTree;
 
 	int m_frequency;
