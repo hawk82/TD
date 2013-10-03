@@ -6,11 +6,17 @@ public class TDGUILogic : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		m_mode = Mode.eNone;
+		m_skipThisUpdate = false;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-
+		
+		if (m_skipThisUpdate)
+		{
+			m_skipThisUpdate = false;
+			return;
+		}
 		TDWorld world = TDWorld.getWorld();
 		TDPlayer tdPlayer = world.getTDPlayer();
 		if (tdPlayer.health() <= 0)
@@ -126,18 +132,21 @@ public class TDGUILogic : MonoBehaviour {
 		if (GUI.Button(new Rect(screenWidth - width, screenHeight - height, 80, textHeight), "Archer"))
 		{
 			m_mode = Mode.eArcher;
+			m_skipThisUpdate = true;
 		}
 
 		GUI.SetNextControlName("Canonier");
 		if (GUI.Button(new Rect(screenWidth - width + 80 + outfit, screenHeight - height, 80, textHeight), "Canonier"))
 		{
-			m_mode = Mode.eCanon;	
+			m_mode = Mode.eCanon;
+			m_skipThisUpdate = true;
 		}
 
 		GUI.SetNextControlName("Ice");
 		if (GUI.Button(new Rect(screenWidth - width + 180 + outfit, screenHeight - height, 80, textHeight), "Ice"))
 		{
-			m_mode = Mode.eIce;	
+			m_mode = Mode.eIce;
+			m_skipThisUpdate = true;
 		}
 
 		GUI.Box(new Rect(outfit, screenHeight - height - outfit, width, height), "Eric the Strongblade");
@@ -150,6 +159,7 @@ public class TDGUILogic : MonoBehaviour {
 		if (GUI.Button(new Rect(50f+2f*outfit, screenHeight - height, 50, textHeight), "Patrol"))
 		{
 			m_mode = Mode.eHeroPatrol;
+			m_skipThisUpdate = true;
 		}
 
 		GUI.SetNextControlName("To base!");
@@ -158,6 +168,7 @@ public class TDGUILogic : MonoBehaviour {
 			m_mode = Mode.eHeroToBase;
 			TDHero tdHero = TDWorld.getWorld().getTDHero();
 			tdHero.runToBase();
+			m_skipThisUpdate = true;
 		}
 
 		switch (m_mode)
@@ -176,18 +187,6 @@ public class TDGUILogic : MonoBehaviour {
 				break;
 		}
 	}
-	
-	bool inBuildingMode()
-	{
-		switch (m_mode)
-		{
-			case Mode.eArcher:
-			case Mode.eCanon:
-				return true;
-			default:
-				return false;
-		}
-	}
 
 	enum Mode
 	{
@@ -198,7 +197,8 @@ public class TDGUILogic : MonoBehaviour {
 		eHeroPatrol = 20,
 		eHeroToBase = 21
 	}
-
+	
+	bool m_skipThisUpdate;
 	Mode m_mode;
     private Vector3 m_dragOrigin;
 }
