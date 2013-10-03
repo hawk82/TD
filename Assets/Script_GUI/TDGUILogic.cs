@@ -37,7 +37,7 @@ public class TDGUILogic : MonoBehaviour {
 			if (terrain.collider.Raycast(ray, out hit, 10000f) && terrain.collider.Raycast(oldRay, out oldHit, 10000f))
 			{
 				Vector3 dir = hit.point - oldHit.point;
- 	        	Vector3 move = new Vector3(dir.x, 0f, 0f);
+ 	        	Vector3 move = new Vector3(-dir.x, 0f, 0f);
  				camera.transform.Translate(move, Space.World); 
 			}
 			return;
