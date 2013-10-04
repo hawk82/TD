@@ -140,8 +140,8 @@ public abstract class TDEnemy : TDActor {
 		{
 			TDPlayer tdP = world.getTDPlayer();
 			tdP.receiveDamage(1);
+			DestroyObject(gameObject);
 		}
-		DestroyObject(gameObject);
 	}
 
 	protected override void onTargetDestroyed()

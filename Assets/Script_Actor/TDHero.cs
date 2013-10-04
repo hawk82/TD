@@ -195,6 +195,8 @@ public class TDHero : TDActor {
 
 	protected override void die()
 	{
+		if (m_state == State.eDead)
+			throw new System.Exception();
 		m_state = State.eDead;
 		renderer.enabled = false;
 		m_deathTime = Time.time;
