@@ -42,6 +42,7 @@ enemyGargoyleHeroHostileChance = 0
 enemyGargoyleHeroHostileRadius = 0
 enemyGargoyleFightRadius       = 2
 enemyGargoylePhysicalDamagePerSec = 1
+enemyGargoyleFlyHeight         = 5 
 
 //Towers
 projectileFallSpeed        = 3.0

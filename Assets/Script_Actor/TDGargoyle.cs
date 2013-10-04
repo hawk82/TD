@@ -15,9 +15,9 @@ public class TDGargoyle : TDEnemy {
 	{
 		return true;
 	}
-	protected override float flyHeight()
+ 	public override Vector3 getElevation()
 	{
-		return 5.0f;
+		return new Vector3(0f, TDWorld.getWorld().m_configuration.enemyGargoyleFlyHeight, 0f);
 	}
 	public override float getResistance(TDDamage.Type type)
 	{

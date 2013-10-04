@@ -63,24 +63,24 @@ public class TDGUILogic : MonoBehaviour {
 					Vector3 pos = hit.point;
 					pos = TDWorld.getWorld().truncate3d(pos);
 					GameObject newTower = null;
-					if (TDGrid.CellState.eFree == world.positionState(pos))
+					if (TDGrid.CellState.eFree == world.positionState3d(pos))
 					{
 						switch (m_mode)
 						{
 							case Mode.eArcher:
-								if (!world.canTowerBeBuiltAt(pos))
+								if (!world.canTowerBeBuiltAt3d(pos))
 									break;
-								newTower = world.addTower(TDTower.Type.eArrowTower, pos);
+								newTower = world.addTower3d(TDTower.Type.eArrowTower, pos);
 								break;
 							case Mode.eCanon:
-								if (!world.canTowerBeBuiltAt(pos))
+								if (!world.canTowerBeBuiltAt3d(pos))
 									break;
-								newTower = world.addTower(TDTower.Type.eCanonTower, pos);
+								newTower = world.addTower3d(TDTower.Type.eCanonTower, pos);
 								break;
 							case Mode.eIce:
-								if (!world.canTowerBeBuiltAt(pos))
+								if (!world.canTowerBeBuiltAt3d(pos))
 									break;
-								newTower = world.addTower(TDTower.Type.eIceTower, pos);
+								newTower = world.addTower3d(TDTower.Type.eIceTower, pos);
 								break;
 							case Mode.eHeroPatrol:
 								TDHero tdHero = world.getTDHero();
@@ -98,7 +98,7 @@ public class TDGUILogic : MonoBehaviour {
 								return;
 							}
 							tdPlayer.expense(tdTower.price());
-							TDWorld.getWorld().occupyPosition(pos, TDGrid.CellState.eBusy);
+							TDWorld.getWorld().occupyPosition3d(pos, TDGrid.CellState.eBusy);
 						}
 					}
 				}

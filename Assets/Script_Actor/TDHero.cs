@@ -8,6 +8,7 @@ public class TDHero : TDActor {
 		base.Start();
 		GameObject respawnPoint = TDWorld.getWorld().getHeroRespawnPoint();
 		transform.position = respawnPoint.transform.position;
+		fixPosition();
 		m_state = State.ePatrol;
 		receiveModifier(new TDHealthRegeneration(10000.0f, TDWorld.getWorld().m_configuration.heroAutoHealPerSec));
 	}
@@ -54,7 +55,7 @@ public class TDHero : TDActor {
 			m_state = State.ePatrol;
 			return;
 		}
-		if ((target().transform.position - transform.position).magnitude > world.m_configuration.heroFightRadius)
+		if ((tdEnemy.getGridPosition() - getGridPosition()).magnitude > world.m_configuration.heroFightRadius)
 		{
 			if (hasPathTo(target()))
 			{
@@ -101,11 +102,13 @@ public class TDHero : TDActor {
 		GameObject [] aEnemies = world.getAllEnemiesUnsafe();
 		foreach (GameObject enemy in aEnemies)
 		{
-			if ((enemy.transform.position - transform.position).magnitude < world.m_configuration.heroPatrolRadius)
+			TDEnemy tdEnemy = TDWorld.getWorld().getTDEnemy(enemy);
+			if (tdEnemy == null)
+				continue;
+			if (tdEnemy.canFly())
+				continue;
+			if ((tdEnemy.getGridPosition() - getGridPosition()).magnitude < world.m_configuration.heroPatrolRadius)
 			{
-				TDEnemy tdEnemy = world.getTDEnemy(enemy);
-				if (tdEnemy.canFly())
-					continue;
 				if (hasPathTo(enemy))
 				{
 					m_state = State.eWalk;
@@ -179,10 +182,6 @@ public class TDHero : TDActor {
 	{
 		return false;
 	}
-	protected override float flyHeight()
-	{
-		return 5.0f;
-	}
 	public override float getResistance(TDDamage.Type type)
 	{
 		return 0f;
@@ -200,7 +199,7 @@ public class TDHero : TDActor {
 		m_state = State.eDead;
 		renderer.enabled = false;
 		m_deathTime = Time.time;
-		m_cross = (GameObject) Instantiate(m_prefabCross, transform.position, new Quaternion());
+		m_cross = (GameObject) Instantiate(m_prefabCross, getWorldPosition(), new Quaternion());
 	}
 
 	protected void deadTime()
@@ -214,6 +213,7 @@ public class TDHero : TDActor {
 		m_HP = getStartHP();
 		GameObject respawnPoint = TDWorld.getWorld().getHeroRespawnPoint();
 		transform.position = respawnPoint.transform.position;
+		fixPosition();
 		m_state = State.ePatrol;
 		renderer.enabled = true;
 		DestroyObject(m_cross);

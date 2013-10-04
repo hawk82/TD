@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public abstract class TDActor : MonoBehaviour {
+public abstract class TDActor : TDMovable {
 
 	// Use this for initialization
 	protected virtual void Start () {
@@ -50,7 +50,10 @@ public abstract class TDActor : MonoBehaviour {
 	}
 
 	public abstract bool canFly();
-	protected abstract float flyHeight();
+ 	public override Vector3 getElevation()
+	{
+		return new Vector3(0f, 0f, 0f);
+	}
 	
 	// Caches the path in case of success
 	public bool hasPathTo(GameObject target)
@@ -77,15 +80,14 @@ public abstract class TDActor : MonoBehaviour {
 		TDWorld world = TDWorld.getWorld();
 		int cellTo = (m_currentCellIndex == m_path.Length - 1) ? m_currentCellIndex : (m_currentCellIndex + 1);
 
-		Vector3 nextCellPos = world.from2dTo3d(world.m_grid.getCenter(m_path[cellTo]));
-		Vector3 dir = nextCellPos - transform.position;
-		dir.y = 0;
+		Vector3 nextCellPos = world.m_grid.getCenter(m_path[cellTo]);
+		Vector3 dir = nextCellPos - getGridPosition();
 		
 		if (!canFly())
 		{
-			if (Mathf.Abs(dir.x) > Mathf.Abs(dir.z))
+			if (Mathf.Abs(dir.x) > Mathf.Abs(dir.y))
 			{
-				dir.z = 0;
+				dir.y = 0;
 			}
 			else
 			{
@@ -96,16 +98,19 @@ public abstract class TDActor : MonoBehaviour {
 
 		float effSpeed = m_momentalSpeedFactor*getStartSpeed();
 		Vector3 move = effSpeed*Time.deltaTime*dir;
-		Vector3 nextPos = transform.position + move;
+		Vector3 nextPos = getGridPosition() + move;
 		if (!canFly())
-			if (TDGrid.CellState.eBusy == TDWorld.getWorld().positionState(nextPos))
+			if (TDGrid.CellState.eBusy == TDWorld.getWorld().positionState2d(nextPos))
 			{
 				return buildPath(target()); // To make things easy walk there next step
 			}
 
-		transform.Translate(move);
+		Vector3 move3d = world.from2dTo3d(move);
 
-		if ( (world.from3dTo2d(transform.position) - world.from3dTo2d(nextCellPos)).magnitude < world.m_configuration.hitDistance )
+		transform.Translate(move3d);
+		fixPosition();
+
+		if ( (world.from3dTo2d(transform.position) - nextCellPos).magnitude < world.m_configuration.hitDistance )
 			++m_currentCellIndex;
 		
 		if (m_currentCellIndex == m_path.Length)

@@ -5,24 +5,21 @@ public abstract class TDProjectile : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		m_previousDir = new Vector3();
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		if (m_target == null)
 		{
-			if (m_previousDir != null)
-			{
-				m_previousDir.Set(m_previousDir.x, 0.0f, m_previousDir.z);
-				m_previousDir.Normalize();
-				transform.position = transform.position + (m_previousDir*(speed()*Time.deltaTime)) +
-									 new Vector3(0f, -TDWorld.getWorld().m_configuration.projectileFallSpeed*Time.deltaTime, 0f);
-				if (transform.position.y < 0)
-					Destroy(gameObject);
-			}
-			else
+			m_previousDir.Set(m_previousDir.x, 0.0f, m_previousDir.z);
+			m_previousDir.Normalize();
+			transform.position = transform.position + (m_previousDir*(speed()*Time.deltaTime)) +
+								 new Vector3(0f, -TDWorld.getWorld().m_configuration.projectileFallSpeed*Time.deltaTime, 0f);
+			if (transform.position.y < 0) // FIX IT
 			{
 				Destroy(gameObject);
+				return;
 			}
 			return;
 		}

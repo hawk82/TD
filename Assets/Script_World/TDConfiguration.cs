@@ -106,6 +106,7 @@ public class TDConfiguration
 	public float enemyGargoyleHeroHostileRadius;
 	public float enemyGargoyleFightRadius;
 	public float enemyGargoylePhysicalDamagePerSec;
+	public float enemyGargoyleFlyHeight ;
 	
 	//Towers
 	public float projectileFallSpeed;

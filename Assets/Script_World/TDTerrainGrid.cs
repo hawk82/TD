@@ -16,7 +16,7 @@ public class TDTerrainGrid : MonoBehaviour {
 			return;
 		if (m_aLines == null)
 		{
-			m_aLines = new GameObject[grid.nbCellsX + grid.nbCellsY + 2];
+			m_aLines = new GameObject[grid.nbCellsX*grid.nbCellsY];
 			GameObject terrainGridLinePrefab = (GameObject) Resources.Load("TerrainGridLinePrefab");
 			for (int i=0; i<m_aLines.Length; i++)
 			{
@@ -31,32 +31,26 @@ public class TDTerrainGrid : MonoBehaviour {
 		float startY = grid.m_startY;
 		float stepX  = grid.m_gridX;
 		float stepY  = grid.m_gridY;
-		for (uint i=0; i<=grid.nbCellsX; i++)
+		for (uint i=0; i<grid.nbCellsX; i++)
 		{
-			GameObject line = m_aLines[lrCount];
-			lrCount++;
-			LineRenderer lineRenderer = line.GetComponent<LineRenderer>();
-			lineRenderer.SetWidth(1, 1);
-			lineRenderer.SetColors(Color.blue, Color.blue);
-			lineRenderer.SetVertexCount(2);
-			Vector3 startLine = new Vector3(startX + ((float) i)*stepX, startY, 0);
-			Vector3 endLine   = new Vector3(startX + ((float) i)*stepX, startY + grid.width, 0);
-			lineRenderer.SetPosition(0, TDWorld.getWorld().from2dTo3d(startLine));
-			lineRenderer.SetPosition(1, TDWorld.getWorld().from2dTo3d(endLine));
-		}
+			for (uint j=0; j<grid.nbCellsY; j++)
+			{
+				GameObject line = m_aLines[lrCount];
+				lrCount++;
+				LineRenderer lineRenderer = line.GetComponent<LineRenderer>();
+				lineRenderer.SetWidth(0.3f, 0.3f);
+				lineRenderer.SetColors(Color.blue, Color.blue);
+				lineRenderer.SetVertexCount(4);
 
-		for (uint i=0; i<=grid.nbCellsY; i++)
-		{
-			GameObject line = m_aLines[lrCount];
-			lrCount++;
-			LineRenderer lineRenderer = line.GetComponent<LineRenderer>();
-			lineRenderer.SetWidth(1, 1);
-			lineRenderer.SetColors(Color.blue, Color.blue);
-			lineRenderer.SetVertexCount(2);
-			Vector3 startLine = new Vector3(startX, startY + ((float) i)*stepY, 0);
-			Vector3 endLine   = new Vector3(startX + grid.length, startY + ((float) i)*stepY, 0);
-			lineRenderer.SetPosition(0, TDWorld.getWorld().from2dTo3d(startLine));
-			lineRenderer.SetPosition(1, TDWorld.getWorld().from2dTo3d(endLine));
+				Vector3 bottomLeft  = new Vector3(startX + ((float) i)*stepX, startY + ((float) j)*stepY, 0);
+				Vector3 bottomRight = new Vector3(bottomLeft.x + stepX, bottomLeft.y, 0);
+				Vector3 upRight     = new Vector3(bottomLeft.x + stepX, bottomLeft.y + stepY, 0);
+				Vector3 upLeft      = new Vector3(bottomLeft.x, bottomLeft.y + stepY, 0);
+				lineRenderer.SetPosition(0, TDWorld.getWorld().from2dTo3d(bottomLeft));
+				lineRenderer.SetPosition(1, TDWorld.getWorld().from2dTo3d(bottomRight));
+				lineRenderer.SetPosition(2, TDWorld.getWorld().from2dTo3d(upRight));
+				lineRenderer.SetPosition(3, TDWorld.getWorld().from2dTo3d(upLeft));
+			}
 		}
 	}
 

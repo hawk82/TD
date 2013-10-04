@@ -12,12 +12,12 @@ public class TDWorld : MonoBehaviour {
 		m_configuration.readFromResource();
 
 		GameObject terrain = getTerrain();
-		Bounds terrainBounds = terrain.renderer.bounds;
+		Bounds terrainBounds = terrain.collider.bounds;
 		Vector3 lowPnt = from3dTo2d(terrainBounds.min);
 		Vector3 highPnt = from3dTo2d(terrainBounds.max);
 		m_grid = new TDGrid();
 		m_grid.initialize(m_configuration.gridNbCellsX, m_configuration.gridNbCellsY,
-						  lowPnt.x, lowPnt.y, highPnt.x - lowPnt.x, highPnt.y - lowPnt.y);
+						  lowPnt.x + 5f, lowPnt.y + 5f, highPnt.x - lowPnt.x - 10f, highPnt.y - lowPnt.y - 10f);
 
 		// Take into account obstacles
 		GameObject [] aObstacles = getAllObstacles();
@@ -34,7 +34,7 @@ public class TDWorld : MonoBehaviour {
 					break;
 			}
 			Bounds b = obj.renderer.bounds;
-			occupyRegion(b.min, b.max, cellState);
+			occupyRegion3d(b.min, b.max, cellState);
 		}
 
 		// put the dynamic obstacles
@@ -50,11 +50,10 @@ public class TDWorld : MonoBehaviour {
 				continue;
 			Vector3 pos = m_grid.getCenter(cell);
 			pos = from2dTo3d(pos);
-			occupyPosition(pos, TDGrid.CellState.eBusy);
-			addTree(pos);
+			occupyPosition3d(pos, TDGrid.CellState.eBusy);
+			addTree3d(pos);
 			treesBuilt++;
 		}
-
 	}
 
 	// Use this for initialization
@@ -72,9 +71,9 @@ public class TDWorld : MonoBehaviour {
 			uint respawnIndex = (uint)(Random.value*aRespawnPoint.Length);
 			Vector3 pos = aRespawnPoint[respawnIndex].transform.position;
 			if (Random.value < 0.3)
-				addEnemy(TDEnemy.Type.eGargoyle, pos);
+				addEnemy3d(TDEnemy.Type.eGargoyle, pos);
 			else
-				addEnemy(TDEnemy.Type.eImp, pos);
+				addEnemy3d(TDEnemy.Type.eImp, pos);
 			m_startTime = (int) ((float)(m_frequency)*Time.time);
 		}
 	}
@@ -194,21 +193,27 @@ public class TDWorld : MonoBehaviour {
 		return (obj.tag == "FakeTarget");
 	}
 
-	public TDGrid.CellState positionState(Vector3 pos)
+	public TDGrid.CellState positionState3d(Vector3 pos)
 	{
 		Vector3 res = from3dTo2d(pos);
 		TDGrid.Cell cell = m_grid.getCell(res);
 		return m_grid.cellState(cell);
 	}
 
-	public void occupyPosition(Vector3 pos, TDGrid.CellState occupyState)
+	public TDGrid.CellState positionState2d(Vector3 pos)
+	{
+		TDGrid.Cell cell = m_grid.getCell(pos);
+		return m_grid.cellState(cell);
+	}
+
+	public void occupyPosition3d(Vector3 pos, TDGrid.CellState occupyState)
 	{
 		Vector3 res = from3dTo2d(pos);
 		TDGrid.Cell cell = m_grid.getCell(res);
 		m_grid.setCellState(cell, occupyState);
 	}
 
-	public void occupyRegion(Vector3 minPos, Vector3 maxPos, TDGrid.CellState occupyState)
+	public void occupyRegion3d(Vector3 minPos, Vector3 maxPos, TDGrid.CellState occupyState)
 	{
 		minPos = from3dTo2d(minPos);
 		TDGrid.Cell minCell = m_grid.getCell(minPos);
@@ -232,9 +237,11 @@ public class TDWorld : MonoBehaviour {
 		return res;
 	}
 
-	public GameObject addEnemy(TDEnemy.Type type, Vector3 pos)
+	public GameObject addEnemy3d(TDEnemy.Type type, Vector3 pos)
 	{
 		GameObject enemy = null;
+		pos = from3dTo2d(pos);
+		pos = from2dTo3d(pos);
 		switch (type)
 		{
 			case TDEnemy.Type.eImp:
@@ -248,8 +255,10 @@ public class TDWorld : MonoBehaviour {
 		return enemy;
 	}
 
-	public GameObject addTower(TDTower.Type type, Vector3 pos)
+	public GameObject addTower3d(TDTower.Type type, Vector3 pos)
 	{
+		pos = from3dTo2d(pos);
+		pos = from2dTo3d(pos);
 		GameObject tower = null;
 		switch (type)
 		{
@@ -267,12 +276,14 @@ public class TDWorld : MonoBehaviour {
 		return tower;
 	}
 
-	public GameObject addTree(Vector3 pos)
+	public GameObject addTree3d(Vector3 pos)
 	{
+		pos = from3dTo2d(pos);
+		pos = from2dTo3d(pos);
 		return (GameObject) Instantiate(m_prefabTree, pos, Quaternion.identity);
 	}
 
-	public bool canTowerBeBuiltAt(Vector3 pos)
+	public bool canTowerBeBuiltAt3d(Vector3 pos)
 	{
 		GameObject player = getPlayer();
 		GameObject [] aRespawnPoints = getAllEnemyRespawnPoints();
@@ -312,7 +323,8 @@ public class TDWorld : MonoBehaviour {
 
 	public Vector3 from2dTo3d(Vector3 vec2d)
 	{
-		return new Vector3(vec2d.x, 1, vec2d.y);
+		float height = Terrain.activeTerrain.SampleHeight(new Vector3(vec2d.x, 0, vec2d.y));
+		return new Vector3(vec2d.x, height, vec2d.y);
 	}
 
 	public Vector3 from3dTo2d(Vector3 vec3d)

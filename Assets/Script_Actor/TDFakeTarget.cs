@@ -13,6 +13,11 @@ public class TDFakeTarget : TDActor {
 	
 	}
 
+ 	public override Vector3 getElevation()
+	{
+		return new Vector3();
+	}
+
 	protected override void onTargetReached(GameObject obj)
 	{
 	}
@@ -32,10 +37,6 @@ public class TDFakeTarget : TDActor {
 	public override bool canFly()
 	{
 		return false;
-	}
-	protected override float flyHeight()
-	{
-		return 0.0f;
 	}
 	public override float getResistance(TDDamage.Type type)
 	{

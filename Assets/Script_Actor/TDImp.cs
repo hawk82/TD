@@ -15,10 +15,6 @@ public class TDImp : TDEnemy {
 	{
 		return false;
 	}
-	protected override float flyHeight()
-	{
-		return 5.0f;
-	}
 	public override float getResistance(TDDamage.Type type)
 	{
 		return 0f;

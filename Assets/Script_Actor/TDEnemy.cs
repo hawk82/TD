@@ -56,7 +56,7 @@ public abstract class TDEnemy : TDActor {
 		}
 		TDHero hero = world.getTDHero();
 		if (hero.isAlive())
-			if ((hero.transform.position - transform.position).magnitude < heroHostileRadius())
+			if ((hero.getGridPosition() - getGridPosition()).magnitude < heroHostileRadius())
 			{
 				if (Random.value < heroHostileChance())
 				{
@@ -76,7 +76,7 @@ public abstract class TDEnemy : TDActor {
 			cleanPath();
 			return;
 		}
-		if ((hero.transform.position - transform.position).magnitude < fightRadius())
+		if ((hero.getGridPosition() - getGridPosition()).magnitude < fightRadius())
 		{
 			cleanPath();
 			TDDamage damage = new TDDamage(TDDamage.Type.ePhysical, physicalDamage()*Time.deltaTime, 0.0f); // Replace by override TDEnemy::getDamage
