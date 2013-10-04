@@ -108,6 +108,8 @@ public class TDConfiguration
 	public float enemyGargoylePhysicalDamagePerSec;
 	
 	//Towers
+	public float projectileFallSpeed;
+
 	public float towerArcherPhysicalDamage;
 	public float towerArcherProjectileSpeed;
 	public float towerArcherRestoration;

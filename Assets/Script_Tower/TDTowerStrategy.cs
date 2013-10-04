@@ -44,6 +44,23 @@ public class TDDefaultTowerStrategy : TDTowerStrategy
 }
 
 
+public class TDStupidTowerStrategy : TDTowerStrategy
+{
+	public override bool shouldShootAt(TDEnemy enemy, TDDamage potentialDamage)
+	{
+		return true;
+	}
+
+	public override void shootingAt(TDEnemy enemy, TDDamage potentialDamage)
+	{
+	}
+
+	public override void destroyCallback(TDEnemy enemy)
+	{
+	}
+}
+
+
 public class TDFairTowerStrategy : TDTowerStrategy
 {
 	public TDFairTowerStrategy() {m_counter = 0; m_counterLimit = 10;}

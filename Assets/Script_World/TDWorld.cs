@@ -7,6 +7,7 @@ public class TDWorld : MonoBehaviour {
 	{
 		m_defaultStrategy = new TDDefaultTowerStrategy();
 		m_fairStrategy    = new TDFairTowerStrategy();
+		m_stupidStrategy  = new TDStupidTowerStrategy();
 		m_configuration = new TDConfiguration();
 		m_configuration.readFromResource();
 
@@ -322,6 +323,7 @@ public class TDWorld : MonoBehaviour {
 	public TDConfiguration m_configuration;
 	public TDTowerStrategy m_defaultStrategy;
 	public TDTowerStrategy m_fairStrategy;
+	public TDTowerStrategy m_stupidStrategy;
 	public TDGrid m_grid;
 
 	public GameObject m_prefabEnemyImp;

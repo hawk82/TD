@@ -44,6 +44,8 @@ enemyGargoyleFightRadius       = 2
 enemyGargoylePhysicalDamagePerSec = 1
 
 //Towers
+projectileFallSpeed        = 3.0
+
 towerArcherPhysicalDamage  = 3
 towerArcherProjectileSpeed = 40.0
 towerArcherRestoration     = 0.3

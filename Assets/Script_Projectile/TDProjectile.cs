@@ -11,12 +11,24 @@ public abstract class TDProjectile : MonoBehaviour {
 	void Update () {
 		if (m_target == null)
 		{
-			Destroy (gameObject);
+			if (m_previousDir != null)
+			{
+				m_previousDir.Set(m_previousDir.x, 0.0f, m_previousDir.z);
+				m_previousDir.Normalize();
+				transform.position = transform.position + (m_previousDir*(speed()*Time.deltaTime)) +
+									 new Vector3(0f, -TDWorld.getWorld().m_configuration.projectileFallSpeed*Time.deltaTime, 0f);
+				if (transform.position.y < 0)
+					Destroy(gameObject);
+			}
+			else
+			{
+				Destroy(gameObject);
+			}
 			return;
 		}
 		moveToTarget();
-		Vector3 dir = m_target.transform.position - transform.position;
-		float dist = dir.magnitude;
+		m_previousDir = m_target.transform.position - transform.position;
+		float dist = m_previousDir.magnitude;
 		// Second condition prevents round-off situation when target is almost reached but not damaged
 		if ((dist < TDWorld.getWorld().m_configuration.hitDistance) ||
 			(dist > (m_recDistance + TDWorld.getWorld().m_configuration.hitDistance)))
@@ -37,6 +49,7 @@ public abstract class TDProjectile : MonoBehaviour {
 	public abstract void moveToTarget();
 	public abstract void onTargetReached();
 	
+	Vector3 m_previousDir;
 	float m_recDistance;
 	public TDDamage m_damage;
 	protected TDActor m_target;
