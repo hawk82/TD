@@ -82,6 +82,11 @@ public class TDHero : TDActor {
 			m_state = State.ePatrol;
 			return;
 		}
+		if ((null != target()) && (TDWorld.getWorld().isFakeTarget(target()))) // Special treatment since fake target is destroyed
+		{
+			patrol(target().transform.position);
+			return;
+		}
 		if (hasPathTo(target()))
 		{
 			if (1 == m_path.Length)
@@ -157,6 +162,7 @@ public class TDHero : TDActor {
 		}
 		else
 		{
+			m_state = State.ePatrol;
 			DestroyObject(fakeTarget);
 		}
 	}

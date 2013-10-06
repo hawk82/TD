@@ -88,11 +88,6 @@ public class TDFairTowerStrategy : TDTowerStrategy
 
 	public override void destroyCallback(TDEnemy enemy)
 	{
-		enemy.OnEventDestroy -= destroyCallback;
-		if (m_followedEnemies.Contains(enemy))
-		{
-			m_followedEnemies.Remove(enemy);
-		}
 	}
 	
 	int m_counter;

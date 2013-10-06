@@ -5,8 +5,8 @@
 drawGrid             = 1
 // Draws paths for enemies
 drawPath             = 1
-gridNbCellsX         = 36
-gridNbCellsY         = 12
+gridNbCellsX         = 24
+gridNbCellsY         = 8
 
 hitDistance          = 0.1
 
@@ -29,7 +29,7 @@ enemyRecalcPathTime       = 3.0
 
 enemyImpHP                = 50
 enemyImpKillReward        = 20
-enemyImpSpeed             = 8.0
+enemyImpSpeed             = 4.0
 enemyImpHeroHostileChance = 0.05
 enemyImpHeroHostileRadius = 5.0
 enemyImpFightRadius       = 2

@@ -8,11 +8,13 @@ public class TDCanonBall : TDProjectile {
 		GameObject newTarget = (GameObject) Instantiate(m_prefabFakeTarget, target.gameObject.transform.position, new Quaternion());
 		TDActor actor = newTarget.GetComponent<TDActor>();
 		base.setTarget(actor);
-		m_target.transform.position = new Vector3(m_target.transform.position.x, 0f, m_target.transform.position.z);
-		Vector3 dir = m_target.transform.position - transform.position;
-		dir.y = 0f;
-		m_startDistance = dir.magnitude;
+		actor.transform.position = target.gameObject.transform.position;
+		Vector3 startDir = m_target.transform.position - transform.position;
+		startDir.y = 0;
+		m_startDistance = startDir.magnitude;
 		m_pathGone = 0f;
+		m_startHeight = transform.position.y;
+		m_endHeight = m_target.transform.position.y;
 	}
 
 	public override float speed()
@@ -22,32 +24,20 @@ public class TDCanonBall : TDProjectile {
 	public override void moveToTarget()
 	{
 		Vector3 dir = m_target.transform.position - transform.position;
-		dir.y = 0f;
+		dir.y = 0;
 		float pathGone = 1.0f - dir.magnitude/m_startDistance;
 		if (m_pathGone > pathGone)
 		{
 			onTargetReached();
+			Destroy(gameObject);
 			return;
 		}
 		m_pathGone = pathGone;
 		dir.Normalize();
 		dir *= speed()*Time.deltaTime;
 		transform.Translate(dir);
-		// Parabola y = ax^2 + c
-		float a = 0f, b = 0f, c = 0f;
-		if (pathGone < 0.5f)
-		{
-			a = 4.0f*(-2.5f + TDWorld.getWorld().m_configuration.towerCanonBallParabolaHeight);
-			b = 1f;
-			c = 2.0f;
-		}
-		else
-		{
-			pathGone -= 0.5f;
-			a = -4.0f*TDWorld.getWorld().m_configuration.towerCanonBallParabolaHeight;
-			c = TDWorld.getWorld().m_configuration.towerCanonBallParabolaHeight;		
-		}
-		float y = a*(pathGone*pathGone) + b*pathGone + c;
+		float y = TDWorld.getWorld().m_configuration.towerCanonBallParabolaHeight*Mathf.Sin(Mathf.PI*pathGone);
+		y += Mathf.Lerp(m_startHeight, m_endHeight, m_pathGone);
 		transform.position = new Vector3(transform.position.x, y, transform.position.z);
 	}
 	public override void onTargetReached()
@@ -73,6 +63,8 @@ public class TDCanonBall : TDProjectile {
 		}
 	}
 	
+	float m_startHeight;
+	float m_endHeight;
 	float m_pathGone;
 	float m_startDistance;
 	public GameObject m_prefabFakeTarget;

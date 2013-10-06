@@ -27,16 +27,19 @@ public abstract class TDProjectile : MonoBehaviour {
 			return;
 		}
 		moveToTarget();
-		m_previousDir = m_target.transform.position - transform.position;
-		float dist = m_previousDir.magnitude;
-		// Second condition prevents round-off situation when target is almost reached but not damaged
-		if ((dist < TDWorld.getWorld().m_configuration.hitDistance) ||
-			(dist > (m_recDistance + TDWorld.getWorld().m_configuration.hitDistance)))
+		if (GetType() != typeof(TDCanonBall))
 		{
-			onTargetReached();
-			Destroy(gameObject);
+			m_previousDir = m_target.transform.position - transform.position;
+			float dist = m_previousDir.magnitude;
+			// Second condition prevents round-off situation when target is almost reached but not damaged
+			if ((dist < TDWorld.getWorld().m_configuration.hitDistance) ||
+				(dist > (m_recDistance + TDWorld.getWorld().m_configuration.hitDistance)))
+			{
+				onTargetReached();
+				Destroy(gameObject);
+			}
+			m_recDistance = dist;
 		}
-		m_recDistance = dist;
 	}
 
 	public virtual void setTarget(TDActor target)

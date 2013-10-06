@@ -13,7 +13,7 @@ public class TDCanonTower : TDTower
 	}
 	public override TDProjectile createProjectile()
 	{
-		GameObject projectile = (GameObject) Instantiate(m_prefabCanonBall, gameObject.transform.position, Quaternion.identity);
+		GameObject projectile = (GameObject) Instantiate(m_prefabCanonBall, gameObject.transform.position + getTowerShootHeight(), Quaternion.identity);
 		return (TDProjectile) projectile.GetComponent<TDProjectile>();
 	}
 	public override TDDamage getTowerDamage()

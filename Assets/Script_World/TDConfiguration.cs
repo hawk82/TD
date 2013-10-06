@@ -8,15 +8,6 @@ public class TDConfiguration
 {
 	public TDConfiguration()
 	{
-		drawGrid = 1;
-		drawPath = 1;
-		gridNbCellsX = 20;
-		gridNbCellsY = 20;
-
-		hitDistance = 0.3f;
-
-		playerHP             = 10;
-
 	}
 
 	public void readFromResource()

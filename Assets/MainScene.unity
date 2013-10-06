@@ -164,8 +164,8 @@ GameObject:
   - 65: {fileID: 333360483}
   - 23: {fileID: 333360482}
   m_Layer: 0
-  m_Name: EnemyRespawn
-  m_TagString: EnemyRespawn
+  m_Name: EnemyRespawn_1
+  m_TagString: EnemyRespawn_1
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -722,8 +722,8 @@ GameObject:
   - 65: {fileID: 2042522910}
   - 23: {fileID: 2042522909}
   m_Layer: 0
-  m_Name: EnemyRespawn
-  m_TagString: EnemyRespawn
+  m_Name: EnemyRespawn_2
+  m_TagString: EnemyRespawn_2
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

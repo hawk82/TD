@@ -59,6 +59,11 @@ public abstract class TDTower : MonoBehaviour {
 		return TDWorld.getWorld().m_defaultStrategy;
 	}
 
+	public virtual Vector3 getTowerShootHeight()
+	{
+		return new Vector3(0f, 2f, 0f);
+	}
+
 	public abstract float getRestoration();
 	public abstract float getEfficientRadius();
 	public abstract TDProjectile createProjectile();

@@ -11,6 +11,9 @@ public class TDWorld : MonoBehaviour {
 		m_configuration = new TDConfiguration();
 		m_configuration.readFromResource();
 
+		m_waves = new TDWaves();
+		m_waves.readFromResource();
+
 		GameObject terrain = getTerrain();
 		Bounds terrainBounds = terrain.collider.bounds;
 		Vector3 lowPnt = from3dTo2d(terrainBounds.min);
@@ -29,10 +32,9 @@ public class TDWorld : MonoBehaviour {
 				case "Player":
 					cellState = TDGrid.CellState.ePlayer;
 					break;
-				case "EnemyRespawn":
-					cellState = TDGrid.CellState.eEnemyRespawn;
-					break;
 			}
+			if (obj.tag.Contains("EnemyRespawn"))
+				cellState = TDGrid.CellState.eEnemyRespawn;
 			Bounds b = obj.renderer.bounds;
 			occupyRegion3d(b.min, b.max, cellState);
 		}
@@ -58,24 +60,17 @@ public class TDWorld : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		m_startTime = -1;
-		m_frequency = 1;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (m_startTime != (int) ((float)(m_frequency)*Time.time))
-		{
-			// Random position
-			GameObject [] aRespawnPoint = getAllEnemyRespawnPoints();
-			uint respawnIndex = (uint)(Random.value*aRespawnPoint.Length);
-			Vector3 pos = aRespawnPoint[respawnIndex].transform.position;
-			if (Random.value < 0.3)
-				addEnemy3d(TDEnemy.Type.eGargoyle, pos);
-			else
-				addEnemy3d(TDEnemy.Type.eImp, pos);
-			m_startTime = (int) ((float)(m_frequency)*Time.time);
-		}
+		if (TDWaves.State.eWave != m_waves.getState())
+			return;
+		TDWave wave = m_waves.getCurrentWave();
+		if (wave.isNextEnemyReady())
+			wave.launchEnemies();
+		if (wave.allEnemiesAreKilled())
+			m_waves.switchToNextWave();
 	}
 
 	void LateUpdate()
@@ -172,18 +167,42 @@ public class TDWorld : MonoBehaviour {
 	public GameObject [] getAllObstacles()
 	{
 		GameObject [] aObstacles = GameObject.FindGameObjectsWithTag("Obstacle");
-		GameObject [] aPlayer = GameObject.FindGameObjectsWithTag("Player");
-		GameObject [] aEnemyRespawn = GameObject.FindGameObjectsWithTag("EnemyRespawn");
+		GameObject player = getPlayer();
+		GameObject [] aEnemyRespawn = getAllEnemyRespawnPoints();
 		List<GameObject> aAllObstacles = new List<GameObject>();
 		aAllObstacles.AddRange(aObstacles);
-		aAllObstacles.AddRange(aPlayer);
+		aAllObstacles.Add(player);
 		aAllObstacles.AddRange(aEnemyRespawn);
 		return aAllObstacles.ToArray();
 	}
 
+	public GameObject getRespawnPoint(uint index)
+	{
+		try
+		{
+			string tag = "EnemyRespawn_" + (index+1);
+			GameObject [] aPoints = GameObject.FindGameObjectsWithTag(tag);
+			if (0 == aPoints.Length)
+				return null;
+			return aPoints[0];
+		}
+		catch (UnityException)
+		{
+			return null;
+		}
+	}
+
 	public GameObject [] getAllEnemyRespawnPoints()
 	{
-		return GameObject.FindGameObjectsWithTag("EnemyRespawn");
+		List<GameObject> aRespawnPoints = new List<GameObject>();
+		for (uint i=0; ; i++)
+		{
+			GameObject respawnPoint = getRespawnPoint(i);
+			if (null == respawnPoint)
+				break;
+			aRespawnPoints.Add(respawnPoint);
+		}
+		return aRespawnPoints.ToArray();		
 	}
 	
 	public bool isFakeTarget(GameObject obj)
@@ -342,6 +361,7 @@ public class TDWorld : MonoBehaviour {
 	public TDTowerStrategy m_fairStrategy;
 	public TDTowerStrategy m_stupidStrategy;
 	public TDGrid m_grid;
+	TDWaves m_waves;
 
 	public GameObject m_prefabEnemyImp;
 	public GameObject m_prefabEnemyGargoyle;
@@ -350,8 +370,5 @@ public class TDWorld : MonoBehaviour {
 	public GameObject m_prefabCanonTower;
 	public GameObject m_prefabIceTower;
 	public GameObject m_prefabTree;
-
-	int m_frequency;
-    int m_startTime;
 
 }
