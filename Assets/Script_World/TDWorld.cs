@@ -332,6 +332,11 @@ public class TDWorld : MonoBehaviour {
 		return new Vector3(vec3d.x, vec3d.z, 0);
 	}
 
+	public float getHeightAt3d(Vector3 vec3d)
+	{
+		return from2dTo3d(from3dTo2d(vec3d)).y;
+	}
+
 	public TDConfiguration m_configuration;
 	public TDTowerStrategy m_defaultStrategy;
 	public TDTowerStrategy m_fairStrategy;

@@ -10,17 +10,20 @@ public abstract class TDProjectile : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+		if (transform.position.y < TDWorld.getWorld().getHeightAt3d(transform.position))
+		{
+			Destroy(gameObject);
+			return;
+		}
+
 		if (m_target == null)
 		{
 			m_previousDir.Set(m_previousDir.x, 0.0f, m_previousDir.z);
 			m_previousDir.Normalize();
 			transform.position = transform.position + (m_previousDir*(speed()*Time.deltaTime)) +
 								 new Vector3(0f, -TDWorld.getWorld().m_configuration.projectileFallSpeed*Time.deltaTime, 0f);
-			if (transform.position.y < 0) // FIX IT
-			{
-				Destroy(gameObject);
-				return;
-			}
+			
 			return;
 		}
 		moveToTarget();
