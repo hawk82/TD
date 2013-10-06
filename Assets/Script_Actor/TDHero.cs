@@ -48,6 +48,8 @@ public class TDHero : TDActor {
 
 	private void fight()
 	{
+		if (!isAlive())
+			return;
 		TDWorld world = TDWorld.getWorld();
 		TDEnemy tdEnemy = world.getTDEnemy(target());
 		if (null == tdEnemy)
@@ -73,6 +75,8 @@ public class TDHero : TDActor {
 
 	private void walk()
 	{
+		if (!isAlive())
+			return;
 		if (null == target())
 		{
 			cleanPath();
@@ -102,6 +106,8 @@ public class TDHero : TDActor {
 
 	private void patrol()
 	{
+		if (!isAlive())
+			return;
 		m_path = null;
 		TDWorld world = TDWorld.getWorld();
 		GameObject [] aEnemies = world.getAllEnemiesUnsafe();
@@ -126,6 +132,9 @@ public class TDHero : TDActor {
 
 	protected override void onTargetReached(GameObject obj)
 	{
+		if (!isAlive())
+			return;
+
 		TDWorld world = TDWorld.getWorld();
 		GameObject player = world.getPlayer();
 		if (obj == player)
@@ -150,11 +159,15 @@ public class TDHero : TDActor {
 
 	protected override void onTargetDestroyed()
 	{
+		if (!isAlive())
+			return;
 		m_state = State.ePatrol;
 	}
 
 	public void patrol(Vector3 pos)
 	{
+		if (!isAlive())
+			return;
 		GameObject fakeTarget = (GameObject) Instantiate(m_prefabFakeTarget, pos, new Quaternion());
 		if (hasPathTo(fakeTarget))
 		{
@@ -169,6 +182,8 @@ public class TDHero : TDActor {
 
 	public void runToBase()
 	{
+		if (!isAlive())
+			return;
 		GameObject player = TDWorld.getWorld().getPlayer();
 		if (hasPathTo(player))
 			m_state = State.eWalk;
@@ -201,6 +216,8 @@ public class TDHero : TDActor {
 	protected override void die()
 	{
 		if (m_state == State.eDead)
+			throw new System.Exception();
+		if (m_cross != null)
 			throw new System.Exception();
 		m_state = State.eDead;
 		renderer.enabled = false;
